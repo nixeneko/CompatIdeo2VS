@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8"> 
+ <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+ <title>互換漢字-異体字セレクタ コンバータ</title>
+ <style type="text/css">
+button{
+  height: 3rem;
+  width: 3rem;
+  font-family : inherit;
+  font-size: 100%;
+}
+#buttons_pc{
+  margin-left:0.7rem;
+}
+#buttons_phone{
+  text-align: center;
+}
+@media screen and (max-width:680px){
+  .container{
+    width: 100%;
+  }
+  .textarea_container{
+    width: 100%;
+  }
+  textarea {
+   width: 100%;
+   resize: vertical;
+   font-family : inherit;
+   font-size: 100%;
+   height: 8em;
+  }
+}
+@media screen and (min-width:680px){
+  .container{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 4rem 1fr;
+    grid-template-rows: 2rem 16em;
+  }
+  textarea {
+    width: 100%;
+    font-family : inherit;
+    font-size: 100%;
+    height: 16em;
+  }
+  #legend_gokan{
+    display: block;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+  }
+  #texcont_compatideo{
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+  }
+  #legend_sv{
+    white-space: nowrap; 
+    grid-row: 1 / 2;
+    grid-column: 3 / 4;
+  }
+  #texcont_sv{
+    grid-row: 2 / 3;
+    grid-column: 3 / 4;
+  }
+  #buttons_pc{
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+  }
+}
+ </style>
+ <script type="text/javascript" src="./compatideo_sv_data.js"></script>
+ <script type="text/javascript">
+//ci2sv_dict
+function compatideo2vs(){
+  text = document.forms.mainForm.compatideo.value;
+  for (key in ci2sv_dict){
+    text = text.replace(key, ci2sv_dict[key]);
+  };
+  //console.log(text.length);
+  document.forms.mainForm.sv.value=text;
+}
+function vs2compatideo(){
+  text = document.forms.mainForm.sv.value;
+  Object.keys(ci2sv_dict).forEach(function (key) {
+    text = text.replace(ci2sv_dict[key], key);
+  });
+  //console.log(text.length);
+  document.forms.mainForm.compatideo.value=text;
+}
+
+function winsize_changed(){
+  if (window.matchMedia("(max-width:680px)").matches){
+    document.getElementById("buttons_pc").style.display = "none";
+    document.getElementById("buttons_phone").style.display = "block";
+  }else{
+    document.getElementById("buttons_pc").style.display = "block";
+    document.getElementById("buttons_phone").style.display = "none";
+  }
+}
+document.addEventListener('DOMContentLoaded', winsize_changed);
+window.addEventListener('resize', winsize_changed, false);
+
+ </script>
+</head>
+<body>
+<h1>CJK互換漢字↔異体字セレクタ(Standardized Variant)コンバータ</h1>
+<p>Unicode正規化でCJK統合漢字に置き換えられてしまうCJK互換漢字を、正規化の影響を受けないStandardized Variant形式と相互変換します。
+<form name="mainForm">
+ <div class="container">
+  <legend id="legend_gokan">互換漢字</legend>
+  <div class="textarea_container" id="texcont_compatideo">
+   <textarea name="compatideo"></textarea>
+  </div>
+  <div id="buttons_pc">
+   <div><button type="button" onclick="compatideo2vs();">→</button></div>
+   <div><button type="button" onclick="vs2compatideo();">←</button></div>
+  </div>
+  <div id="buttons_phone" style="display:none;">
+   <div><button type="button" onclick="compatideo2vs();">↓</button><button type="button" onclick="vs2compatideo();">↑</button></div>
+  </div>
+  <legend id="legend_sv">異体字セレクタ(Standardized Variants)</legend>
+  <div class="textarea_container" id="texcont_sv">
+   <textarea name="sv"></textarea>
+  </div>
+ </div>
+</form>
+<p>利用: <script type="text/javascript">document.write(sv_version);</script></p>
+</body>
+</html>
