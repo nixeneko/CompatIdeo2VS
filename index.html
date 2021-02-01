@@ -75,7 +75,7 @@ button{
 function compatideo2vs(){
   text = document.forms.mainForm.compatideo.value;
   for (key in ci2sv_dict){
-    text = text.replace(key, ci2sv_dict[key]);
+    text = text.replaceAll(key, ci2sv_dict[key]);
   };
   //console.log(text.length);
   document.forms.mainForm.sv.value=text;
@@ -83,7 +83,7 @@ function compatideo2vs(){
 function vs2compatideo(){
   text = document.forms.mainForm.sv.value;
   Object.keys(ci2sv_dict).forEach(function (key) {
-    text = text.replace(ci2sv_dict[key], key);
+    text = text.replaceAll(ci2sv_dict[key], key);
   });
   //console.log(text.length);
   document.forms.mainForm.compatideo.value=text;
